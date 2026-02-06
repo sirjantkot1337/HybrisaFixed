@@ -36,7 +36,7 @@
 	set name = "View Playtimes"
 	set desc = "View your playtimes."
 	if(!SSentity_manager.ready)
-		to_chat(src, "DB is still starting up, please wait")
+		to_chat(src, "DB is still starting up, please wait.")
 		return
 	if(client && client.player_entity)
 		client.player_data.tgui_interact(src)
@@ -264,6 +264,13 @@
 		QDEL_NULL(observed_atom)
 		return
 
+	if(!client)
+		return
+
+	if(client.view != world.view)
+		to_chat(src, SPAN_WARNING("You cannot look up while zoomed!"))
+		return
+
 	if(HAS_TRAIT(src, TRAIT_ABILITY_BURROWED))
 		to_chat(src, SPAN_WARNING("We cannot look up here, we are burrowed!"))
 		return
@@ -272,7 +279,10 @@
 		to_chat(src, SPAN_WARNING("You cannot look up here."))
 		return
 
-	var/turf/above = locate(x, y, z+1)
+	var/turf/above = SSmapping.get_turf_above(loc)
+	if(!isturf(above))
+		to_chat(src, SPAN_WARNING("You cannot look up here."))
+		return
 
 	if(!istransparentturf(above))
 		to_chat(src, SPAN_WARNING("You cannot look up here."))

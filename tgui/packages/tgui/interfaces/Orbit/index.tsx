@@ -405,7 +405,8 @@ const GroupedObservable = (props: {
             <ObservableSection
               color={x.color}
               title={x.title}
-              section={props.sorter ? x.members.sort(props.sorter) : x.members}
+              section={x.members}
+              sorter={props.sorter}
               key={x.title}
             />
           ))}
@@ -471,20 +472,20 @@ const weyyuSplitter = (members: Array<Observable>) => {
   const whiteout: Array<Observable> = [];
   const wycommando: Array<Observable> = [];
   const pmc: Array<Observable> = [];
-  const goons: Array<Observable> = [];
+  const security: Array<Observable> = [];
   const other: Array<Observable> = [];
 
   members.forEach((x) => {
     if (x.job?.includes(JobsRu('Whiteout'))) {
       whiteout.push(x);
-    } else if (x.job?.includes(JobsRu('Death Squad'))) {
-      whiteout.push(x);
-    } else if (x.job?.includes('W-Y Commando')) {
+    } else if (x.job?.includes(JobsRu('W-Y Commando'))) {
       wycommando.push(x);
     } else if (x.job?.includes(JobsRu('PMC'))) {
       pmc.push(x);
-    } else if (x.job?.includes(JobsRu('Corporate Security'))) {
-      goons.push(x);
+    } else if (x.job?.includes(JobsRu('Security'))) {
+      security.push(x);
+    } else if (x.job?.includes(JobsRu('Bodyguard'))) {
+      security.push(x);
     } else {
       other.push(x);
     }
@@ -492,9 +493,9 @@ const weyyuSplitter = (members: Array<Observable>) => {
 
   const squads = [
     buildSquadObservable(JobsRu('PMCs'), 'white', pmc),
-    buildSquadObservable(JobsRu('Goons'), 'orange', goons),
+    buildSquadObservable(JobsRu('Security Forces'), 'orange', security),
     buildSquadObservable(JobsRu('Corporate'), 'white', other),
-    buildSquadObservable(JobsRu('W-Y Commando'), 'white', wycommando),
+    buildSquadObservable(JobsRu('W-Y Commandos'), 'white', wycommando),
     buildSquadObservable(JobsRu('Whiteout'), 'red', whiteout),
   ];
   return squads;
@@ -699,8 +700,9 @@ const ObservableSection = (props: {
   readonly color?: string;
   readonly section: Array<Observable>;
   readonly title: string;
+  readonly sorter?: groupSorter;
 }) => {
-  const { color, section = [], title } = props;
+  const { color, section = [], title, sorter } = props;
 
   const {
     value: searchQuery,
@@ -716,11 +718,14 @@ const ObservableSection = (props: {
     .filter((observable) => isJobOrNameMatch(observable, searchQuery))
     .filter((observable) => (observable.in_ground === 1 ? show_ground : true))
     .filter((observable) => (observable.in_ship === 1 ? show_ship : true))
-    .sort((a, b) =>
-      a.full_name
+    .sort((a, b) => {
+      if (sorter) {
+        return sorter(a, b);
+      }
+      return a.full_name
         .toLocaleLowerCase()
-        .localeCompare(b.full_name.toLocaleLowerCase()),
-    );
+        .localeCompare(b.full_name.toLocaleLowerCase());
+    });
 
   if (!filteredSection.length) {
     return null;

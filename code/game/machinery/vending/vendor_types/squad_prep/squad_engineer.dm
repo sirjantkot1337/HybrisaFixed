@@ -83,7 +83,7 @@ GLOBAL_LIST_INIT(cm_vending_gear_engi, list(
 		list("Fulton Device Stack", 5, /obj/item/stack/fulton, null, VENDOR_ITEM_REGULAR),
 		list("Fire Extinguisher (Portable)", 3, /obj/item/tool/extinguisher/mini, null, VENDOR_ITEM_REGULAR),
 		list("Motion Detector", 8, /obj/item/device/motiondetector, null, VENDOR_ITEM_REGULAR),
-		list("Whistle", 3, /obj/item/device/whistle, null, VENDOR_ITEM_REGULAR),
+		list("Whistle", 3, /obj/item/clothing/accessory/device/whistle, null, VENDOR_ITEM_REGULAR),
 		list("Synthetic Reset Key", 10, /obj/item/device/defibrillator/synthetic, null, VENDOR_ITEM_REGULAR),
 
 		list("BINOCULARS", 0, null, null, null),
@@ -107,7 +107,8 @@ GLOBAL_LIST_INIT(cm_vending_gear_engi, list(
 		// SS220 EDIT - START
 		list("ОБОРУДОВАНИЕ", 0, null, null, null),
 		list("Мотоцикл (Камуфляж)", 20, /obj/vehicle/motorbike/camo, CIVILIAN_CAN_BUY_SHOES, VENDOR_ITEM_REGULAR),
-		list("Коляска мотоцикла (Камуфляж)", 10, /obj/structure/bed/chair/stroller/camo, CIVILIAN_CAN_BUY_SHOES, VENDOR_ITEM_REGULAR),
+		list("Пассажирская коляска (Камуфляж)", 10, /obj/structure/bed/chair/sidecar/passenger/camo, CIVILIAN_CAN_BUY_SHOES, VENDOR_ITEM_REGULAR),
+		list("Грузовая коляска (Камуфляж)", 10, /obj/structure/bed/chair/sidecar/cargo/camo, CIVILIAN_CAN_BUY_SHOES, VENDOR_ITEM_REGULAR),
 		// SS220 EDIT - END
 	))
 

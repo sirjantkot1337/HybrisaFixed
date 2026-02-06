@@ -30,6 +30,7 @@
 	success_sound = 'sound/surgery/scalpel2.ogg'
 	failure_sound = 'sound/surgery/organ2.ogg'
 
+//TODO220 - review the translation and remove unnecessary code additions
 /datum/surgery_step/incision/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, tool_type, datum/surgery/surgery)
 	var/ru_name_affected_limb = declent_ru_initial(surgery.affected_limb.display_name, PREPOSITIONAL, surgery.affected_limb.display_name) // SS220 EDIT ADDICTION
 
@@ -69,11 +70,18 @@
 				SPAN_NOTICE("[capitalize(user.declent_ru(NOMINATIVE))] завершает делать программный разрез на [ru_name_affected_limb] [target.declent_ru(GENITIVE)].")) // SS220 EDIT ADDICTION
 
 			surgery.status += 2 //IMS completes all steps.
+
+			switch(target_zone) //forces application of overlays
+				if("chest")
+					target.overlays += image('icons/mob/humans/dam_human.dmi', "chest_surgery_closed")
+				if("head")
+					target.overlays += image('icons/mob/humans/dam_human.dmi', "skull_surgery_closed")
+
 		if(/obj/item/tool/surgery/scalpel/laser)
 			user.affected_message(target,
-				SPAN_NOTICE("Вы завершаете делать лазерный разрез на [ru_name_affected_limb] [target.declent_ru(GENITIVE)]."), // SS220 EDIT ADDICTION
-				SPAN_NOTICE("[capitalize(user.declent_ru(NOMINATIVE))] завершает делать лазерный разрез на вашей [ru_name_affected_limb]."), // SS220 EDIT ADDICTION
-				SPAN_NOTICE("[capitalize(user.declent_ru(NOMINATIVE))] завершает делать лазерный разрез на [ru_name_affected_limb] [target.declent_ru(GENITIVE)].")) // SS220 EDIT ADDICTION
+				SPAN_NOTICE("Вы завершаете делать лазерный разрез на [ru_name_affected_limb] [target.declent_ru(GENITIVE)]."),
+				SPAN_NOTICE("[capitalize(user.declent_ru(NOMINATIVE))] завершает делать лазерный разрез на вашей [ru_name_affected_limb]."),
+				SPAN_NOTICE("[capitalize(user.declent_ru(NOMINATIVE))] завершает делать лазерный разрез на [ru_name_affected_limb] [target.declent_ru(GENITIVE)]."))
 
 			surgery.status++ //A laser scalpel may cauterise as it cuts.
 		else
@@ -744,7 +752,7 @@ If fiddling with, uncomment /mob/living/attackby surgery code also. It's pointle
 	steps = list(/datum/surgery_step/test_incision)
 	pain_reduction_required = NONE //Xenos cannot process painkillers.
 	requires_bodypart = FALSE //Xenos have no limbs.
-	target_mobtypes = list(/mob/living/carbon/xenomorph, /mob/living/simple_animal/cat/Jones)
+	target_mobtypes = list(/mob/living/carbon/xenomorph, /mob/living/simple_animal/small/cat/Jones)
 	lying_required = FALSE
 
 /datum/surgery_step/test_incision
@@ -788,7 +796,7 @@ If fiddling with, uncomment /mob/living/attackby surgery code also. It's pointle
 	priority = SURGERY_PRIORITY_HIGH
 	possible_locs = list("chest")
 	required_surgery_skill = SKILL_SURGERY_TRAINED
-	target_mobtypes = list(/mob/living/simple_animal/cat/Jones)
+	target_mobtypes = list(/mob/living/simple_animal/small/cat/Jones)
 	steps = list(/datum/surgery_step/mend_test_organ_step)
 	pain_reduction_required = NONE //Xenos cannot process painkillers.
 	requires_bodypart = FALSE //Xenos have no limbs.
@@ -848,7 +856,7 @@ If fiddling with, uncomment /mob/living/attackby surgery code also. It's pointle
 	self_operable = TRUE
 	pain_reduction_required = NONE //Xenos cannot process painkillers.
 	requires_bodypart = FALSE //Xenos have no limbs.
-	target_mobtypes = list(/mob/living/carbon/xenomorph, /mob/living/simple_animal/cat/Jones)
+	target_mobtypes = list(/mob/living/carbon/xenomorph, /mob/living/simple_animal/small/cat/Jones)
 	lying_required = FALSE
 
 //------------------------------------

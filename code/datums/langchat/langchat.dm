@@ -11,6 +11,7 @@
 /mob/living/carbon/xenomorph/defender/langchat_height = 48
 /mob/living/carbon/xenomorph/warrior/langchat_height = 48
 /mob/living/carbon/xenomorph/king/langchat_height = 64
+/mob/living/carbon/xenomorph/despoiler/langchat_height = 64
 
 #define LANGCHAT_LONGEST_TEXT 64
 #define LANGCHAT_WIDTH 96
@@ -94,7 +95,7 @@
 	langchat_make_image(override_color)
 	var/image/r_icon
 	var/use_mob_style = TRUE
-	var/text_to_display = message
+	var/text_to_display = sanitize_tts_symbols(message) // BANDAMARINES EDIT - Show normal text
 	var/is_emote = additional_styles && additional_styles.Find("emote")
 	if(length(text_to_display) > LANGCHAT_LONGEST_TEXT)
 		text_to_display = copytext_char(text_to_display, 1, LANGCHAT_LONGEST_TEXT + 1) + "..."
@@ -147,7 +148,7 @@
 	langchat_make_image()
 
 	var/text_left = null
-	var/text_to_display = message
+	var/text_to_display = sanitize_tts_symbols(message) // BANDAMARINES EDIT - Show normal text
 
 	if(length(message) > LANGCHAT_LONGEST_TEXT)
 		text_to_display = copytext_char(message, 1, LANGCHAT_LONGEST_TEXT - 5) + "..."

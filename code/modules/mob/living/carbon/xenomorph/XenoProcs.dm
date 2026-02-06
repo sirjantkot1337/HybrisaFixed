@@ -313,10 +313,10 @@
 		throwing = FALSE
 		return
 
-	if (pounceAction.can_be_shield_blocked)
+	if(pounceAction.can_be_shield_blocked)
 		if(ishuman(M) && (M.dir in reverse_nearby_direction(dir)))
 			var/mob/living/carbon/human/H = M
-			if(H.check_shields(15, "the pounce")) //Human shield block.
+			if(H.check_shields("the pounce", get_dir(H, src), attack_type = SHIELD_ATTACK_POUNCE, custom_response = TRUE)) //Human shield block.
 				visible_message(SPAN_DANGER("[capitalize(declent_ru(NOMINATIVE))] врезается в [H.declent_ru(ACCUSATIVE)]!"), // SS220 EDIT ADDICTION
 					SPAN_XENODANGER("Мы врезаемся в [H]!"), null, 5) // SS220 EDIT ADDICTION
 				KnockDown(1)
@@ -327,14 +327,14 @@
 
 			if(isyautja(H))
 				if(H.check_shields(0, "the pounce", 1))
-					visible_message(SPAN_DANGER("[capitalize(H.declent_ru(NOMINATIVE))] блокирует прыжок [declent_ru(GENITIVE)] с помощью комби-палки!"), SPAN_XENODANGER("[capitalize(H.declent_ru(NOMINATIVE))] блокирует наш прыжок с помощью комби-палки!"), null, 5) // SS220 EDIT ADDICTION
+					visible_message(SPAN_DANGER("[H] blocks the pounce of [src] with the combistick!"), SPAN_XENODANGER("[H] blocks our pouncing form with the combistick!"), null, 5)
 					apply_effect(3, WEAKEN)
 					throwing = FALSE
 					playsound(H, "bonk", 75, FALSE)
 					return
 				else if(prob(75)) //Body slam the fuck out of xenos jumping at your front.
-					visible_message(SPAN_DANGER("[capitalize(H.declent_ru(NOMINATIVE))] сбивает [declent_ru(ACCUSATIVE)] с ног!"), // SS220 EDIT ADDICTION
-						SPAN_XENODANGER("[capitalize(H.declent_ru(NOMINATIVE))] сбивает нас с ног!"), null, 5) // SS220 EDIT ADDICTION
+					visible_message(SPAN_DANGER("[H] body slams [src]!"),
+						SPAN_XENODANGER("[H] body slams us!"), null, 5)
 					KnockDown(3)
 					Stun(3)
 					throwing = FALSE
@@ -585,12 +585,12 @@
 	if(SSticker?.mode?.hardcore)
 		nocrit = TRUE
 		if(wowave < 15)
-			maxHealth = ((maxHealth+abs(crit_health))*(wowave/15)*(3/4))+((maxHealth)*1/4) //if it's wo we give xeno's less hp in lower rounds. This makes help the marines feel good.
-			health = ((health+abs(crit_health))*(wowave/15)*(3/4))+((health)*1/4) //if it's wo we give xeno's less hp in lower rounds. This makes help the marines feel good.
+			maxHealth = ((maxHealth+abs(health_threshold_dead))*(wowave/15)*(3/4))+((maxHealth)*1/4) //if it's wo we give xeno's less hp in lower rounds. This makes help the marines feel good.
+			health = ((health+abs(health_threshold_dead))*(wowave/15)*(3/4))+((health)*1/4) //if it's wo we give xeno's less hp in lower rounds. This makes help the marines feel good.
 		else
-			maxHealth = maxHealth+abs(crit_health) // From round 15 and on we give them only a slight boost
-			health = health+abs(crit_health) // From round 15 and on we give them only a slight boost
-	crit_health = -1 // Do not put this at 0 or xeno's will just vanish on WO due to how the garbage collector works.
+			maxHealth = maxHealth+abs(health_threshold_dead) // From round 15 and on we give them only a slight boost
+			health = health+abs(health_threshold_dead) // From round 15 and on we give them only a slight boost
+	health_threshold_dead = -1 // Do not put this at 0 or xeno's will just vanish on WO due to how the garbage collector works.
 
 
 // Handle queued actions.
@@ -667,7 +667,7 @@
 	if(HAS_TRAIT(src, TRAIT_ABILITY_BURROWED))
 		return FALSE
 
-	if(caste.fire_immunity & FIRE_IMMUNITY_NO_DAMAGE)
+	if(fire_immunity & (FIRE_IMMUNITY_NO_DAMAGE || FIRE_IMMUNITY_COMPLETE))
 		burn_amount *= 0.5
 
 	apply_damage(burn_amount, BURN)

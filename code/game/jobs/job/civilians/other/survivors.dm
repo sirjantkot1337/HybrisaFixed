@@ -79,7 +79,7 @@ GLOBAL_LIST_EMPTY(spawned_survivors)
 	if(picked_spawner.roundstart_damage_max > 0)
 		if(istype(picked_spawner) && picked_spawner.roundstart_damage_max > 0)
 			for(var/i in 0 to picked_spawner.roundstart_damage_times)
-			H.take_limb_damage(rand(picked_spawner.roundstart_damage_min, picked_spawner.roundstart_damage_max), 0)
+				H.take_limb_damage(rand(picked_spawner.roundstart_damage_min, picked_spawner.roundstart_damage_max), 0)
 
 	H.name = H.get_visible_name()
 
@@ -225,7 +225,7 @@ AddTimelock(/datum/job/civilian/survivor, list(
 	if(picked_spawner.CO_equipment) //insert with CO
 		arm_equipment(equipping_human, picked_spawner.CO_equipment, FALSE, TRUE)
 		return
-	else if(length(CO_survivor_types)) //map with guarenteed CO slot
+	else if(length(CO_survivor_types)) //map with guaranteed CO slot
 		arm_equipment(equipping_human, pick(CO_survivor_types), FALSE, TRUE)
 		return
 	else //map that has an insert that enabled rolling for CO but the insert didn't fire and there is no default CO equipment, thus equip as a normal survivor

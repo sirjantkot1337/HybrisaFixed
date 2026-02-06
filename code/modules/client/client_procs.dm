@@ -58,6 +58,7 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 	/client/proc/set_crit_type,
 	/client/proc/set_flashing_lights_pref,
 	/client/proc/toggle_leadership_spoken_orders,
+	/client/proc/toggle_cocking_to_hand,
 ))
 
 /client/proc/reduce_minute_count()
@@ -107,7 +108,7 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 			topiclimiter[SECOND_COUNT] = 0
 		topiclimiter[SECOND_COUNT] += 1
 		if (topiclimiter[SECOND_COUNT] > stl)
-			to_chat(src, SPAN_DANGER("Your previous action was ignored because you've done too many in a second"))
+			to_chat(src, SPAN_DANGER("Your previous action was ignored because you've done too many in a second."))
 			return
 
 	// Tgui Topic middleware
@@ -167,7 +168,7 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 			for(var/photo in info.photo_list)
 				usr << browse_rsc(info.photo_list[photo], photo)
 
-		show_browser(usr, "<body class='paper'>[info.data]</body>", "Fax Message", "Fax Message")
+		show_browser(usr, "<body class='paper'>[info.data]</body>", "Fax Message", "Fax Message", width=DEFAULT_PAPER_WIDTH, height=DEFAULT_PAPER_HEIGHT, extra_stylesheets=info.extra_stylesheets, extra_headers=info.extra_headers)
 
 	else if(href_list["medals_panel"])
 		GLOB.medals_panel.tgui_interact(mob)
@@ -322,7 +323,7 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 		to_chat_immediate(src, SPAN_DANGER("<b>Ваша версия BYOND устарела:</b>"))
 		to_chat_immediate(src, CONFIG_GET(string/client_error_message))
 		to_chat_immediate(src, "Ваша версия BYOND: [byond_build] ([byond_version].[byond_build])")
-		to_chat_immediate(src, "Рекомендуемая версия BYOND: [breaking_build] ([breaking_version].[breaking_build]) или новее")
+		to_chat_immediate(src, "Рекомендуемая версия BYOND: [breaking_build] ([breaking_version].[breaking_build]) или новее.")
 		to_chat_immediate(src, "Для загрузки последних версий BYOND посетите <a href=\"https://www.byond.com/download\">официальный сайт</a> продукта.")
 		return FALSE
 
@@ -965,6 +966,39 @@ CLIENT_VERB(action_hide_menu)
 		winset(src, "mapwindow.map", "right-click=false")
 		winset(src, "default.Shift", "is-disabled=true")
 		winset(src, "default.ShiftUp", "is-disabled=true")
+
+#ifdef SPACEMAN_DMM
+/client/VAR_PRIVATE/eye
+/client/VAR_PRIVATE/pixel_x
+/client/VAR_PRIVATE/pixel_y
+#endif
+
+/client/proc/set_eye(new_eye)
+	SEND_SIGNAL(src, COMSIG_CLIENT_EYE_CHANGED, new_eye)
+
+	eye = new_eye
+
+/client/proc/get_eye() as /atom
+	RETURN_TYPE(/atom)
+
+	return eye
+
+/client/proc/set_pixel_x(new_pixel_x)
+	SEND_SIGNAL(src, COMSIG_CLIENT_PIXEL_X_CHANGED, new_pixel_x)
+
+	pixel_x = new_pixel_x
+
+/client/proc/get_pixel_x() as num
+	return pixel_x
+
+/client/proc/set_pixel_y(new_pixel_y)
+	SEND_SIGNAL(src, COMSIG_CLIENT_PIXEL_Y_CHANGED, new_pixel_y)
+
+	pixel_y = new_pixel_y
+
+/client/proc/get_pixel_y() as num
+	return pixel_y
+
 
 GLOBAL_VAR(ooc_rank_dmi)
 GLOBAL_LIST_INIT(ooc_rank_iconstates, setup_ooc_rank_icons())

@@ -4,15 +4,17 @@
 
 #include "code/button_tooltips.dm"
 #include "code/pronouns.dm"
-#include "code/ru_ammunition_desc.dm"
-#include "code/ru_weapon_desc.dm"
+// #include "code/ru_ammunition_desc.dm" // MOVE TO ORIGINAL CODE
+// #include "code/ru_weapon_desc.dm" // MOVE TO ORIGINAL CODE
 #include "code/ru_names/ru_name_base.dm"
 #include "code/ru_names/ru_vendors.dm"
 #include "code/ru_names/ru_date.dm"
 #include "code/ru_names/ru_access.dm"
 #include "code/ru_names/ru_reagents.dm"
+#include "code/telephone/phone.dm"
 #include "code/translate_dirs.dm"
 #include "code/translate_emotes.dm"
+#include "code/translate_preferences.dm"
 #include "code/translate_verbs.dm"
 
 // MARK: faction_rank translate
@@ -128,6 +130,7 @@
 #include "code/xeno/xeno_abilities/castes/carrier.dm"
 #include "code/xeno/xeno_abilities/castes/crusher.dm"
 #include "code/xeno/xeno_abilities/castes/defender.dm"
+#include "code/xeno/xeno_abilities/castes/despoiler.dm"
 #include "code/xeno/xeno_abilities/castes/facehugger.dm"
 #include "code/xeno/xeno_abilities/castes/hivelord.dm"
 #include "code/xeno/xeno_abilities/castes/king.dm"

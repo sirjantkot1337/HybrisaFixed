@@ -68,6 +68,8 @@
 	var/t_theirs = ru_p_theirs() // SS220 EDIT ADDICTION
 	//var/t_has = "has" // SS220 EDIT ADDICTION
 	//var/t_is = "is" // SS220 EDIT ADDICTION
+	//var/t_do = "does" // SS220 EDIT ADDITION
+	//var/t_seem = "seems" // SS220 EDIT ADDITION
 
 	var/id_paygrade = ""
 	var/obj/item/card/id/I = get_idcard()
@@ -79,6 +81,19 @@
 	if(!skipjumpsuit || !skipface) //big suits/masks/helmets make it hard to tell their gender
 		if(icon)
 			msg += "[icon2html(src, user)] "
+		/* //BANDAMARINES EDIT START
+		switch(gender)
+			if(MALE)
+				t_He = "He"
+				t_his = "his"
+				t_him = "him"
+				t_is = "is"
+			if(FEMALE)
+				t_He = "She"
+				t_his = "her"
+				t_him = "her"
+				t_is = "is"
+		*/ // BANDAMARINES EDIT END
 
 	if(id_paygrade)
 		msg += "<EM>[rank_display] </EM>"
@@ -168,9 +183,9 @@
 					found_iff = TRUE
 			if(found_iff)
 				if(get_target_lock(human_with_gun.get_id_faction_group()) > 0)
-					msg += SPAN_HELPFUL("[capitalize(t_He)] is compatible with your weapon's IFF.\n")
+					msg += SPAN_HELPFUL("[t_He] is compatible with your weapon's IFF.\n")
 				else
-					msg += SPAN_DANGER("[capitalize(t_He)] is not compatible with your weapon's IFF. They will be shot by your weapon!\n")
+					msg += SPAN_DANGER("[t_He] is not compatible with your weapon's IFF. They will be shot by your weapon!\n")
 	//Restraints
 	if(handcuffed)
 		msg += SPAN_ORANGE("[t_His] руки в [handcuffed.declent_ru(PREPOSITIONAL)].\n")
@@ -208,11 +223,11 @@
 				damage += limb_surgeries
 
 			if(length(damage))
-				msg += SPAN_WARNING("У [t_theirs] [english_list(damage, final_comma_text = ",")] на [t_his] [o.declent_ru(PREPOSITIONAL)]!\n")
+				msg += SPAN_WARNING("У [t_theirs] [english_list(damage, final_comma_text = ",")] на [o.declent_ru(PREPOSITIONAL)]!\n")
 
 	if(holo_card_color)
 		// SS220 START EDIT ADDICTION
-		var/holo_card_color_ru = list(
+		var/static/list/holo_card_color_ru = list(
 			red = "красная",
 			purple = "фиолетовая",
 			orange = "оранжевая",
@@ -272,7 +287,7 @@
 						wound_flavor_text["[temp.display_name]"] = SPAN_WARNING("У [t_theirs] [temp.status & LIMB_UNCALIBRATED_PROSTHETIC ? " нефункционирующий" : ""] протез [temp.declent_ru(GENITIVE)]!\n")
 						continue
 				else
-					wound_flavor_text["[temp.display_name]"] = SPAN_WARNING("У [t_theirs] [temp.status & LIMB_UNCALIBRATED_PROSTHETIC ? " нефункционирующий" : ""] [temp.status & LIMB_SYNTHSKIN ? "синтетический" : "кибернетический"] протез [temp.declent_ru(GENITIVE)]. У него")
+					wound_flavor_text["[temp.display_name]"] = SPAN_WARNING("У [t_theirs] [temp.status & LIMB_UNCALIBRATED_PROSTHETIC ? " нефункционирующий" : ""] [temp.status & LIMB_SYNTHSKIN ? "синтетический" : "кибернетический"] протез [temp.declent_ru(GENITIVE)]. У протеза")
 				if(temp.brute_dam)
 					switch(temp.brute_dam)
 						if(0 to 20)
@@ -298,15 +313,15 @@
 					if(W.damage_type == BURN)
 						switch(W.salved & (WOUND_BANDAGED|WOUND_SUTURED))
 							if(WOUND_BANDAGED)
-								this_wound_desc = "обработанн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
+								this_wound_desc = "Обработанн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
 							if(WOUND_SUTURED, (WOUND_BANDAGED|WOUND_SUTURED)) //Grafting has priority.
-								this_wound_desc = "пересаженн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]" //??????!
+								this_wound_desc = "Пересаженн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]" //??????!
 					else
 						switch(W.bandaged & (WOUND_BANDAGED|WOUND_SUTURED))
 							if(WOUND_BANDAGED, (WOUND_BANDAGED|WOUND_SUTURED)) //Bandages go over the top.
-								this_wound_desc = "перевязанн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
+								this_wound_desc = "Перевязанн[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
 							if(WOUND_SUTURED)
-								this_wound_desc = "зашит[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
+								this_wound_desc = "Зашит[genderize_ru(W.declent_ru("gender"), "ый", "ая", "ое", "ыx")] [this_wound_desc]"
 
 					if(wound_descriptors[this_wound_desc])
 						wound_descriptors[this_wound_desc] += W.amount
@@ -468,7 +483,7 @@
 		msg += SPAN_WARNING(SPAN_BOLD("У [t_theirs] огромное отверстие в груди!\n"))
 
 	for(var/implant in get_visible_implants())
-		msg += SPAN_BOLDWARNING("У [t_theirs] торчит [lowertext(implant)] в теле!") + "\n" // SS220 EDIT ADDICTION
+		msg += SPAN_WARNING("У [t_theirs] торчит [lowertext(implant)] в теле!") + "\n" // SS220 EDIT ADDICTION
 
 	if(hasHUD(user,"security") || (observer && observer.HUD_toggled["Security HUD"]))
 		var/perpref
@@ -538,7 +553,7 @@
 	if (pose)
 		if( findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0 )
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
-		msg += "\n[t_He] is [pose]"
+		msg += "\n[t_He] [pose]" // BANDAMARINES EDIT
 
 	. += msg
 
